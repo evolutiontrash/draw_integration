@@ -10,7 +10,7 @@ export interface DrawAppSettings {
 }
 
 export const DEFAULT_SETTINGS: DrawAppSettings = {
-	create: "cp ~/Templates/draw.kra ${file}",
+	create: "cp ~/Templates/draw.kra ${this.file}",
 	open: "krita ${this.file}",
 	build: "krita ${this.file} --export --export-filename ${this.dest}",
 	dest: ".krita",
@@ -61,7 +61,7 @@ export class SettingTab extends PluginSettingTab {
 					.inputEl.addClass('large-text-field'));
 		new Setting(containerEl)
 			.setName('Creation command')
-			.setDesc('How you create a draw from the command line. (kra, svg, psd, etc).\nYou might require the {this.file} to indicate where it should be created.')
+			.setDesc('How you create a draw from the command line. (kra, svg, psd, etc). You might require the {this.file} to indicate where it should be created.')
 			.addText(text => text
 				.setPlaceholder('cp /path/to/template/draw.kra ${this.file}')
 				.setValue(this.plugin.settings.create)
@@ -83,7 +83,7 @@ export class SettingTab extends PluginSettingTab {
 				.inputEl.addClass('large-text-field'));
 		new Setting(containerEl)
 			.setName('Build command')
-			.setDesc('Command to build your draw.\n{this.file} for the location of the project, {this.dest} to where it should be exported.')
+			.setDesc('Command to build your draw. {this.file} for the location of the project, {this.dest} to where it should be exported.')
 			.addText(text => text
 				.setPlaceholder('magick {this.file} {this.dest}')
 				.setValue(this.plugin.settings.build)

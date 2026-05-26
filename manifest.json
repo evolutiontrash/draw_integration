@@ -1,7 +1,7 @@
 {
 	"id": "draw-integration",
 	"name": "Draw Integration",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"minAppVersion": "0.15.0",
 	"description": "Integrate a draw application into your workflow, Krita, MyPaint, GIMP (who uses this, just kinding), etc., everything at the speed of thought.",
 	"author": "asbolute",
