@@ -2,7 +2,7 @@ import { spawn } from "child_process";
 import { existsSync, mkdirSync } from 'fs';
 import { Notice } from "obsidian";
 import * as path from "path";
-import { DrawAppSettings } from "./settings";
+import { drawCommands } from "src/types";
 
 export type files = {
 	file: string;
@@ -10,10 +10,10 @@ export type files = {
 }
 
 export class Draw {
-	settings: DrawAppSettings;
+	settings: drawCommands;
 	path: string;
 
-	constructor(vault: string, settings: DrawAppSettings) {
+	constructor(vault: string, settings: drawCommands) {
 		this.path = vault;
 		this.settings = settings;
 	}

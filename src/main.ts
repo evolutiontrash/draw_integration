@@ -1,50 +1,17 @@
-import { Editor, MarkdownView, Notice, Plugin } from 'obsidian';
-import { files, Draw } from "./draw";
-import { DrawAppSettings, SettingTab, DEFAULT_SETTINGS } from "./settings"
+import { Plugin } from 'obsidian';
+import { DrawPluginCommands } from './commands/commands';
+import { SettingTab, DEFAULT_SETTINGS } from "./settings/settings"
+import { drawCommands } from './types';
 
 export default class DrawPlugin extends Plugin {
-	settings: DrawAppSettings;
-	drawer: Draw;
+	commands: drawCommands;
+	oCommands: DrawPluginCommands
 
-	getFileName(editor: Editor): files | null {
-		let line = editor.getLine(editor.getCursor().line);
-		if (!line.startsWith("![[") || !line.endsWith(".png]]")) {
-			new Notice("Need an image as ![[path/to/image.png]]");
-			return null;
-		}
-		line = line.replace("![[", "").replace("]]", "").replace("\n", "");
-		return this.drawer.enrich({
-			file: line.replace(".png", this.settings.filetype),
-			dest: line,
-		});
-	}
 
 	async onload() {
 		await this.loadSettings();
-		await this.loadDrawer();
+		await this.loadCommands();
 
-		this.addCommand({
-			id: 'draw-build',
-			name: 'Export draw',
-			editorCallback: (editor: Editor, _view: MarkdownView) => {
-				const fs = this.getFileName(editor);
-				if (!fs) return;
-				this.drawer.build(fs);
-			}
-		});
-
-		this.addCommand({
-			id: 'draw-open',
-			name: 'Open draw',
-			editorCallback: (editor: Editor, _view: MarkdownView) => {
-				const fs = this.getFileName(editor);
-				if (!fs) return;
-				this.drawer.create(fs);
-				this.drawer.open(fs);
-			}
-		});
-
-		this.addSettingTab(new SettingTab(this.app, this));
 
 		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
 			console.log('click', evt);
@@ -58,15 +25,16 @@ export default class DrawPlugin extends Plugin {
 	}
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		this.commands = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		this.addSettingTab(new SettingTab(this.app, this));
 	}
 
 	async saveSettings() {
-		await this.saveData(this.settings);
+		await this.saveData(this.commands);
 	}
 
-	async loadDrawer() {
-		// @ts-ignore cus of basepath .-.
-		this.drawer = new Draw(this.app.vault.adapter.basePath, this.settings);
+	async loadCommands() {
+		this.oCommands = new DrawPluginCommands(this, this.commands);
+		this.oCommands.onLoad()
 	}
 }
