@@ -13,11 +13,13 @@ export default class DrawPlugin extends Plugin {
 		await this.loadCommands();
 
 
+		/*
 		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
 			console.log('click', evt);
 		});
+		*/
 
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
+		// this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
 	}
 
 	onunload() {
@@ -35,6 +37,6 @@ export default class DrawPlugin extends Plugin {
 
 	async loadCommands() {
 		this.oCommands = new DrawPluginCommands(this, this.commands);
-		this.oCommands.onLoad()
+		this.oCommands.loadCommands(this)
 	}
 }

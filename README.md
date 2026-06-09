@@ -9,9 +9,9 @@ all this using a single and already used expression in obsidian.
 That's all, no weird business with new syntax.
 
 # Disclaimer
-If you are in Linux.
+If you are using Linux.
 This might only run if you are running Obsidian as a regular application, 
-Because I don't think, flatpak might allow to run a shell command on the host machine (haven't tried it).
+Because flatpak doesn't allow apps to run code on the host machine (I have already tried it).
 
 # Usage
 
@@ -30,23 +30,45 @@ You don't need to create the folder, it should be created automatically.
 
 Once created you can then run the commands from the command palette.
 
-## Open Draw 
-Now that you created your empty image link, 
-now while your cursor is on that line, you can run the `Open Draw` command,
-1. Open the command palette.
-2. Type `draw` (due to how obsidian manages the commands when searching this is a simple way to find the commands).
-3. Click/Run the command `Open Draw`.
-This command will:
-1. Create the project file.
-2. Open the program.
-This way you can start drawing on your favorite program as you would do on a regular session.
-Then you save, and quit the program, and now you draw project is totally saved.
+## Draw (All)
+With this command you'll run every one of the other commands one after another,
 
-## Export Draw 
+You can run this command by:
+1. Placing your cursor is on the line of the image link.
+2. Type `drawl`.
+2. Click/Run the command titled `Draw (All)`.
+
+As mentioned before this command will execute the Create, Open and Export commands one after another.
+
+### Possible issue
+Theoretically it will execute the export command after you close your application, 
+but one can never be totally sure,
+maybe your opening command doesn't depend on the shell and detaches from it,
+the term is `daemonize`, and your command executes something else to open your program and then finishes, 
+in this case the individual commands come in handy.
+
+## Create draw 
+Now that you created your empty image link, 
+while your cursor is on that line, you can run the `Create draw` command,
+1. Open the command palette.
+2. Type `drawc` (due to how obsidian manages the commands when searching this is a simple way to find the commands).
+3. Click/Run the command `Create draw`.
+
+This command will create the project file, so its ready for the next command.
+
+## Open draw
+While the cursor is on the image link line,
+1. Open the command palette.
+2. Type `drawo` (again obsidian command search is weird, but useful).
+3. Click/Run the command titled `Open draw`.
+
+This will open your application, and you can start drawing.
+
+## Export draw 
 When you already finished your draw session, you might want to export your drawing.
 You can do this by running the other command `Export Draw`, 
 while your cursor is on the image link.
-1. Type `drawx` (again obsidian command search is weird, but useful).
+1. Type `drawx`.
 2. Click/Run the command `Export Draw`.
 This will export the project to a png.
 And will e automatically update the draw.
@@ -194,4 +216,14 @@ magick ${this.file} ${this.dest}
 ```
 As the command indicates its magic, because it can turn every image type into every image type (I haven't tested this statement tbh).
 
+# Flatpak
+I may have found a workaround for flatpak users, 
+using Flatseal (or even the terminal, 
+I just don't use flatpak that much to know how to do this in the terminal)
+Enable or give the Obsidian application access to the `D-Bus Session Bus`.
 
+And add this 
+```config
+flatpak-spawn --host
+```
+to the beginning of every command.

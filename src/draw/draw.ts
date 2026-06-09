@@ -1,13 +1,7 @@
 import { spawn } from "child_process";
 import { existsSync, mkdirSync } from 'fs';
-import { Notice } from "obsidian";
 import * as path from "path";
-import { drawCommands } from "src/types";
-
-export type files = {
-	file: string;
-	dest: string;
-}
+import { drawCommands, files } from "src/types";
 
 export class Draw {
 	settings: drawCommands;
@@ -25,33 +19,46 @@ export class Draw {
 		}
 	}
 
-	public create(io: files) {
+	public async all(io: files) {
+		await this.create(io);
+		await this.open(io);
+		await this.build(io);
+	}
+
+	public async create(io: files) {
 		if (existsSync(io.file) || existsSync(io.dest)) return;
 		const dir = io.file.replace(io.file.split("/").pop()!, "");
-		mkdirSync(dir, {recursive: true});
-		this.run(this.settings.create, io);
+		mkdirSync(dir, { recursive: true });
+		await this.exec(this.settings.create, io);
 	}
 
-	public open(io: files) {
-		this.run(this.settings.open, io);
+	public async open(io: files) {
+		await this.exec(this.settings.open, io);
 	}
 
-	public build(io: files) {
+	public async build(io: files) {
 		const dir = io.dest.replace(io.dest.split("/").pop()!, "");
-		mkdirSync(dir, {recursive: true});
-		this.run(this.settings.build, io);
+		mkdirSync(dir, { recursive: true });
+		await this.exec(this.settings.build, io);
 	}
 
 	private filler(template: string, vars: files) {
 		return new Function("return `" + template + "`;").call(vars)
 	}
 
-	private run(command: string, io: files) {
-		const comm = this.filler(command, io);
-		const coms = comm.split(" ");
-		const child = spawn(coms[0], coms.slice(1));
-		child.stdout.on('data', (chunk) => console.log(chunk));
-		child.stderr.on('error', (error) => console.log(error)); // Don't know if it works, don't ask.-.
-		child.on('close', (code) => new Notice(`exited with ${code}`));
+	private exec(command: string, io: files): Promise<number> {
+		return new Promise((resolve, reject) => {
+			const comm = this.filler(command, io);
+			const coms = comm.split(" ");
+			const child = spawn(coms[0], coms.slice(1));
+			child.on('close', code => {
+				console.log(code)
+				if (code === 0) {
+					resolve(code)
+				} else {
+					reject(code)
+				}
+			});
+		})
 	}
 }
