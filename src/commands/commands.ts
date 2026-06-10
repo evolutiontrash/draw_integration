@@ -42,7 +42,7 @@ export class DrawPluginCommands {
 			editorCallback: (editor: Editor, _view: MarkdownView) => {
 				const fs = this.getFileName(editor);
 				if (!fs) return;
-				this.drawer.open(fs);
+				this.drawer.openProgram(fs);
 			}
 		});
 

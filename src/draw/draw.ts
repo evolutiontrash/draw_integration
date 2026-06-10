@@ -21,7 +21,7 @@ export class Draw {
 
 	public async all(io: files) {
 		await this.create(io);
-		await this.open(io);
+		await this.openProgram(io);
 		await this.build(io);
 	}
 
@@ -32,7 +32,7 @@ export class Draw {
 		await this.exec(this.settings.create, io);
 	}
 
-	public async open(io: files) {
+	public async openProgram(io: files) {
 		await this.exec(this.settings.open, io);
 	}
 
@@ -51,8 +51,14 @@ export class Draw {
 			const comm = this.filler(command, io);
 			const coms = comm.split(" ");
 			const child = spawn(coms[0], coms.slice(1));
+			child.stdout.on('data', data => {
+				console.log(`${io.dest}, ${data}`)
+			})
+			child.stderr.on('error', err => {
+				console.error(`${io.dest}, ${err}`)
+			})
 			child.on('close', code => {
-				console.log(code)
+				console.log(`${io.dest}, ${code}`)
 				if (code === 0) {
 					resolve(code)
 				} else {

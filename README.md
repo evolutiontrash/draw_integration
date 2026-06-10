@@ -34,9 +34,10 @@ Once created you can then run the commands from the command palette.
 With this command you'll run every one of the other commands one after another,
 
 You can run this command by:
-1. Placing your cursor is on the line of the image link.
-2. Type `drawl`.
-2. Click/Run the command titled `Draw (All)`.
+1. Placing your cursor on the line of the image link.
+2. Open the command palette.
+3. Type `drawl`.
+4. Click/Run the command titled `Draw (All)`.
 
 As mentioned before this command will execute the Create, Open and Export commands one after another.
 
@@ -44,14 +45,14 @@ As mentioned before this command will execute the Create, Open and Export comman
 Theoretically it will execute the export command after you close your application, 
 but one can never be totally sure,
 maybe your opening command doesn't depend on the shell and detaches from it,
-the term is `daemonize`, and your command executes something else to open your program and then finishes, 
+and your command executes something else to open your program and then finishes, 
 in this case the individual commands come in handy.
 
 ## Create draw 
 Now that you created your empty image link, 
 while your cursor is on that line, you can run the `Create draw` command,
 1. Open the command palette.
-2. Type `drawc` (due to how obsidian manages the commands when searching this is a simple way to find the commands).
+2. Type `drawc` (due to how obsidian manages the commands when searching, this is a simple way to find the commands).
 3. Click/Run the command `Create draw`.
 
 This command will create the project file, so its ready for the next command.
@@ -69,7 +70,7 @@ When you already finished your draw session, you might want to export your drawi
 You can do this by running the other command `Export Draw`, 
 while your cursor is on the image link.
 1. Type `drawx`.
-2. Click/Run the command `Export Draw`.
+2. Click/Run the command `Export draw`.
 This will export the project to a png.
 And will e automatically update the draw.
 
