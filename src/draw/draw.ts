@@ -42,14 +42,12 @@ export class Draw {
 		await this.exec(this.settings.build, io);
 	}
 
-	private filler(template: string, vars: files) {
-		return new Function("return `" + template + "`;").call(vars)
-	}
-
 	private exec(command: string, io: files): Promise<number> {
 		return new Promise((resolve, reject) => {
-			const comm = this.filler(command, io);
+			let comm = command.replace("${this.file}", io.file).
+							   replace("${this.dest}", io.dest);
 			const coms = comm.split(" ");
+			console.log(comm);
 			const child = spawn(coms[0], coms.slice(1));
 			child.stdout.on('data', data => {
 				console.log(`${io.dest}, ${data}`)
